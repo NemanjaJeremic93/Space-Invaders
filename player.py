@@ -1,18 +1,24 @@
 import pygame
+from pathlib import Path
 from bullet import Bullet
 from settings import (WIDTH, HEIGHT, PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_SPEED,
                       PLAYER_BULLET_SPEED, PLAYER_SHOOT_DELAY, GREEN, WHITE)
 
+ASSET_DIR = Path(__file__).parent / "assets"
 
 class Player:
 
     def __init__(self):
 
-        self.rect = pygame.Rect(
-            WIDTH // 2 - PLAYER_WIDTH // 2,
-            HEIGHT - 60,
-            PLAYER_WIDTH,
-            PLAYER_HEIGHT
+        self.image = pygame.image.load(
+            str(ASSET_DIR / "player.png")
+        ).convert_alpha()
+        self.image = pygame.transform.scale(
+            self.image, (PLAYER_WIDTH, PLAYER_HEIGHT)
+        )
+
+        self.rect = self.image.get_rect(
+            midbottom=(WIDTH // 2, HEIGHT - 30)
         )
 
         self.speed = PLAYER_SPEED
@@ -57,8 +63,4 @@ class Player:
         return bullet
 
     def draw(self, screen):
-        pygame.draw.rect(
-            screen,
-            GREEN,
-            self.rect,
-        )
+        screen.blit(self.image, self.rect)
